@@ -14,7 +14,7 @@ DEPLOYMENT = secrets["qa"]["deployment"]
 
 
 
-''' ===== Azure Language Server ===== '''
+''' ===== Azure Language Service Connection ===== '''
 
 from azure.ai.language.questionanswering import QuestionAnsweringClient
 
@@ -32,10 +32,23 @@ def get_answer(question):
 
 ''' ===== Web Server ===== '''
 
-from flask import Flask
+from flask import Flask, render_template, request, redirect
 
 app = Flask(__name__)
+answer = 'https://mostlamedia.blob.core.windows.net/media/media1.mp4'
 
-@app.route('/')
+
+@app.route('/', methods=['GET', 'POST'])
 def main():
-    return '<p> Hello, World! </p>'
+    global answer
+
+    if request.method == 'POST':
+        question = request.form['question']
+        answer = get_answer(question)
+
+        print(f'Q: {question}')
+        print(f'A: {answer}')
+
+        return redirect('/')
+    else:
+        return render_template('index.jinja', video_src=answer)
