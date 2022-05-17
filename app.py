@@ -13,7 +13,6 @@ KNOWLEDGE_BASE = secrets["qa"]["project-name"]
 DEPLOYMENT = secrets["qa"]["deployment"]
 
 
-
 ''' ===== Azure Language Service Connection ===== '''
 
 from azure.ai.language.questionanswering import QuestionAnsweringClient
@@ -29,13 +28,12 @@ def get_answer(question):
     return output.answers[0].answer
 
 
-
 ''' ===== Web Server ===== '''
 
 from flask import Flask, render_template, request, redirect
 
 app = Flask(__name__)
-answer = 'https://mostlamedia.blob.core.windows.net/media/media1.mp4'
+answer = secrets['init-video']
 
 
 @app.route('/', methods=['GET', 'POST'])
