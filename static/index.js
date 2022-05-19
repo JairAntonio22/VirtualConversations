@@ -1,3 +1,4 @@
+const audio = document.querySelector('.tmp-player')
 const record = document.querySelector('.record')
 
 if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
@@ -13,14 +14,10 @@ if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
                 if (recording) {
                     mediaRecorder.stop()
                     record.innerHTML = "Grabar"
-                    record.classList.remove("btn-danger")
-                    record.classList.add("btn-outline-danger")
                 } else {
                     chunks = []
                     mediaRecorder.start()
-                    record.innerHTML = "Enviar"
-                    record.classList.remove("btn-outline-danger")
-                    record.classList.add("btn-danger")
+                    record.innerHTML = "Detener"
                 }
 
                 recording = !recording
@@ -31,9 +28,6 @@ if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
             }
 
             mediaRecorder.onstop = (e) => {
-                // const audio = document.createElement("audio")
-                // audio.setAttribute("name", "audio-query")
-                const audio = document.querySelector('.tmp-player')
                 const blob = new Blob(chunks, {"type": "audio/ogg; codecs=opus"})
                 const audioURL = window.URL.createObjectURL(blob)
                 audio.src = audioURL

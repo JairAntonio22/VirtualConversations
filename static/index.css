@@ -2,3 +2,11 @@ video, form {
     width: 100%;
     max-width: 768px;
 }
+
+.tmp-player {
+    display: none;
+}
+
+.logo {
+    width: 128px;
+}

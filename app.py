@@ -30,23 +30,40 @@ def get_answer(question):
 
 ''' ===== Web Server ===== '''
 
+import os
 from flask import Flask, render_template, request, redirect
 
-app = Flask(__name__)
+UPLOAD_FOLDER = 'test'
 answer = secrets['init-video']
 
+app = Flask(__name__)
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-@app.route('/', methods=['GET', 'POST'])
-def main():
+
+@app.route('/text', methods=['POST'])
+def text():
     global answer
 
-    if request.method == 'POST':
+    if 'question' in request.form:
         question = request.form['question']
         answer = get_answer(question)
 
-        print(f'Q: {question}')
-        print(f'A: {answer}')
+    return redirect('/')
 
-        return redirect('/')
-    else:
-        return render_template('index.jinja', video_src=answer)
+
+
+@app.route('/audio', methods=['POST'])
+def audio():
+    if 'audio' in request.files:
+        audio = request.files['audio']
+
+        if audio.filename:
+            filepath = os.path.join(app.config['UPLOAD_FOLDER'], audio.filename)
+            audio.save(filepath)
+
+    return redirect('/')
+
+
+@app.route('/')
+def main():
+    return render_template('index.jinja', video_src=answer)
