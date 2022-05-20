@@ -1,5 +1,8 @@
-const audio = document.querySelector('.tmp-player')
 const record = document.querySelector('.record')
+const audio = document.querySelector('.tmp-player')
+
+let blob = null
+let audioURL = null
 
 if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
     let chunks = [];
@@ -9,13 +12,13 @@ if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
         .getUserMedia({audio: true})
         .then((stream) => {
             const mediaRecorder = new MediaRecorder(stream)
+            console.log(mediaRecorder.mimeType)
 
             record.onclick = () => {
                 if (recording) {
                     mediaRecorder.stop()
                     record.innerHTML = "Grabar"
                 } else {
-                    chunks = []
                     mediaRecorder.start()
                     record.innerHTML = "Detener"
                 }
@@ -28,9 +31,10 @@ if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
             }
 
             mediaRecorder.onstop = (e) => {
-                const blob = new Blob(chunks, {"type": "audio/ogg; codecs=opus"})
-                const audioURL = window.URL.createObjectURL(blob)
+                blob = new Blob(chunks)
+                audioURL = window.URL.createObjectURL(blob)
                 audio.src = audioURL
+                chunks = []
             }
         })
         .catch((err) => {
@@ -38,4 +42,19 @@ if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
         })
 } else {
     console.log("getUserMedia not supported on your browser!");
+}
+
+const sender = document.querySelector('.sender')
+
+sender.onclick = () => {
+    if (blob) {
+        const formData = new FormData()
+
+        formData.append('audio', blob, 'recording.ogg')
+
+        fetch('/audio', {
+            method: 'POST',
+            body: formData
+        })
+    }
 }

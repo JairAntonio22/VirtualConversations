@@ -10,17 +10,15 @@
 <body>
     <div class="d-flex flex-column justify-content-evenly">
         <div class="d-flex flex-row justify-content-center align-items-center">
-        <img
-            class="logo p-4 me-1"
-            src="{{ url_for("static", filename="favicon.ico") }}"
-        >
-        </img>
+            <img
+                class="logo p-4 me-1"
+                src="{{ url_for("static", filename="favicon.ico") }}"
+            >
+            </img>
             <h1 class="text-center ms-1"> Conversaciones virtuales </h1>
         </div>
         <div class="d-flex justify-content-center px-5">
-            <video src="{{ video_src }}" controls/>
-                video tag not supported by browser
-            </video>
+            <video src="{{ video_src }}" controls/> video not supported </video>
         </div>
         <div class="d-flex flex-row justify-content-center pt-4 px-5">
             <form
@@ -37,25 +35,18 @@
                     value="{{ request.form["question"] }}"
                 >
                 </input>
-                <button type="submit" class="btn btn-outline-success ms-1">
-                    Enviar
-                </button>
+                <button type="submit" class="btn btn-outline-success ms-1"> Enviar </button>
             </form>
         </div>
         <div class="d-flex flex-row justify-content-evenly py-4 px-5">
             <form
-                action="http://127.0.0.1:5000/audio"
+                action="http://127.0.0.1:5000/"
                 class="d-flex flex-row justify-content-evenly"
                 enctype=multipart/form-data
-                method="post"
             >
-                <input name="audio" type='file' class="tmp-player" controls> </input>
-                <button type="button" class="record btn btn-outline-danger">
-                    Grabar
-                </button>
-                <button type="submit" class="btn btn-outline-success">
-                    Enviar
-                </button>
+                <audio class="tmp-player" controls> </audio>
+                <button type="button" class="record btn btn-outline-danger"> Grabar </button>
+                <button type="submit" class="btn btn-outline-success sender"> Enviar </button>
             </form>
         </div>
     </div>

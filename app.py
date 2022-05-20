@@ -31,7 +31,9 @@ def get_answer(question):
 ''' ===== Web Server ===== '''
 
 import os
-from flask import Flask, render_template, request, redirect
+from flask import (
+    Flask, render_template, request, redirect
+)
 
 UPLOAD_FOLDER = 'test'
 answer = secrets['init-video']
