@@ -1,4 +1,10 @@
-video, form {
+iframe {
+    width: 100%;
+    height: 432px;
+    max-width: 768px;
+}
+
+form {
     width: 100%;
     max-width: 768px;
 }

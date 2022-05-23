@@ -4,13 +4,20 @@
 import json
 from azure.core.credentials import AzureKeyCredential
 
-with open(".secrets.json") as secret_file:
+
+with open('.secrets.json') as secret_file:
     secrets = json.load(secret_file)
 
-ENDPOINT = secrets["qa"]["endpoint"]
-CREDENTIAL = AzureKeyCredential(secrets["qa"]["key"])
-KNOWLEDGE_BASE = secrets["qa"]["project-name"]
-DEPLOYMENT = secrets["qa"]["deployment"]
+
+# Language service
+QA_ENDPOINT = secrets['qa']['endpoint']
+QA_KEY = AzureKeyCredential(secrets['qa']['key'])
+QA_PROJECT = secrets['qa']['project-name']
+QA_DEPLOYMENT = secrets['qa']['deployment']
+
+# Language service
+STT_KEY = secrets['stt']['key']
+STT_REGION = secrets['stt']['region']
 
 
 ''' ===== Azure Language Service Connection ===== '''
@@ -18,11 +25,11 @@ DEPLOYMENT = secrets["qa"]["deployment"]
 from azure.ai.language.questionanswering import QuestionAnsweringClient
 
 def get_answer(question):
-    with QuestionAnsweringClient(ENDPOINT, CREDENTIAL) as client:
+    with QuestionAnsweringClient(QA_ENDPOINT, QA_KEY) as client:
         output = client.get_answers(
             question = question,
-            project_name = KNOWLEDGE_BASE,
-            deployment_name = DEPLOYMENT
+            project_name = QA_PROJECT,
+            deployment_name = QA_DEPLOYMENT
         )
 
     return output.answers[0].answer
@@ -51,7 +58,6 @@ def text():
         answer = get_answer(question)
 
     return redirect('/')
-
 
 
 @app.route('/audio', methods=['POST'])

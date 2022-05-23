@@ -17,8 +17,9 @@
             </img>
             <h1 class="text-center ms-1"> Conversaciones virtuales </h1>
         </div>
+        <hr class="mt-0 mb-4"> </hr>
         <div class="d-flex justify-content-center px-5">
-            <video src="{{ video_src }}" controls/> video not supported </video>
+            <iframe src="{{ video_src }}" allow="autoplay"/> </iframe>
         </div>
         <div class="d-flex flex-row justify-content-center pt-4 px-5">
             <form
@@ -35,7 +36,9 @@
                     value="{{ request.form["question"] }}"
                 >
                 </input>
-                <button type="submit" class="btn btn-outline-success ms-1"> Enviar </button>
+                <button type="submit" class="btn btn-outline-success text-nowrap ms-1">
+                    Enviar pregunta
+                </button>
             </form>
         </div>
         <div class="d-flex flex-row justify-content-evenly py-4 px-5">
@@ -46,7 +49,9 @@
             >
                 <audio class="tmp-player" controls> </audio>
                 <button type="button" class="record btn btn-outline-danger"> Grabar </button>
-                <button type="submit" class="btn btn-outline-success sender"> Enviar </button>
+                <button type="submit" class="btn btn-outline-success sender">
+                    Enviar audio
+                </button>
             </form>
         </div>
     </div>
