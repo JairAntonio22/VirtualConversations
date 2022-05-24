@@ -35,6 +35,44 @@ def get_answer(question):
     return output.answers[0].answer
 
 
+''' ===== Azure Speech Service Connection ===== '''
+
+from azure.cognitiveservices.speech import (
+    SpeechConfig, audio, SpeechRecognizer, ResultReason, CancellationReason
+)
+
+from pydub import AudioSegment
+
+def recognize():
+    speech_config = SpeechConfig(subscription = STT_KEY, region=STT_REGION)
+    speech_config.speech_recognition_language = 'es-MX'
+    audio_config = audio.AudioConfig(filename='test/recording.wav')
+
+    recognizer = SpeechRecognizer(
+        speech_config=speech_config, audio_config=audio_config
+    )
+
+    result = recognizer.recognize_once_async().get()
+
+    if result.reason == ResultReason.RecognizedSpeech:
+        print(f'Recognized: {result.text}')
+        return result.text
+
+    elif result.reason == ResultReason.NoMatch:
+        print(f'No speech could be recognized: {result.no_match_details}')
+        return ''
+
+    elif result.reason == ResultReason.Canceled:
+        details = result.details
+
+        print(f'Speech Recognition canceled: {details.reason}')
+
+        if details.reason == CancellationReason.Error:
+            print(f'Error details: {details.error_details}')
+
+        return ''
+
+
 ''' ===== Web Server ===== '''
 
 import os
@@ -68,6 +106,9 @@ def audio():
         if audio.filename:
             filepath = os.path.join(app.config['UPLOAD_FOLDER'], audio.filename)
             audio.save(filepath)
+
+            # sound = AudioSegment.from_ogg('test/recording.ogg')
+            # sound.export('test/recording.wav', format='wav')
 
     return redirect('/')
 
