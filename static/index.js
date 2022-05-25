@@ -50,7 +50,7 @@ sender.onclick = () => {
     if (blob) {
         const formData = new FormData()
 
-        formData.append('audio', blob, 'recording.wav')
+        formData.append('audio', blob, 'recording.ogg')
 
         fetch('/audio', {
             method: 'POST',

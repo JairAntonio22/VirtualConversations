@@ -41,8 +41,6 @@ from azure.cognitiveservices.speech import (
     SpeechConfig, audio, SpeechRecognizer, ResultReason, CancellationReason
 )
 
-from pydub import AudioSegment
-
 def recognize():
     speech_config = SpeechConfig(subscription = STT_KEY, region=STT_REGION)
     speech_config.speech_recognition_language = 'es-MX'
@@ -88,7 +86,7 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 
 @app.route('/text', methods=['POST'])
-def text():
+def handle_text():
     global answer
 
     if 'question' in request.form:
@@ -99,16 +97,15 @@ def text():
 
 
 @app.route('/audio', methods=['POST'])
-def audio():
+def handle_audio():
     if 'audio' in request.files:
         audio = request.files['audio']
 
         if audio.filename:
             filepath = os.path.join(app.config['UPLOAD_FOLDER'], audio.filename)
             audio.save(filepath)
-
-            # sound = AudioSegment.from_ogg('test/recording.ogg')
-            # sound.export('test/recording.wav', format='wav')
+            os.system('ffmpeg -y -i test/recording.ogg test/recording.wav')
+            recognize()
 
     return redirect('/')
 
