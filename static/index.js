@@ -49,12 +49,14 @@ const sender = document.querySelector('.sender')
 sender.onclick = () => {
     if (blob) {
         const formData = new FormData()
-
         formData.append('audio', blob, 'recording.ogg')
 
         fetch('/audio', {
             method: 'POST',
             body: formData
+        }).then((response) => {
+            console.log(response.url)
+            window.location.replace(response.url);
         })
     }
 }

@@ -41,10 +41,10 @@ from azure.cognitiveservices.speech import (
     SpeechConfig, audio, SpeechRecognizer, ResultReason, CancellationReason
 )
 
-def recognize():
+def recognize(filename):
     speech_config = SpeechConfig(subscription = STT_KEY, region=STT_REGION)
     speech_config.speech_recognition_language = 'es-MX'
-    audio_config = audio.AudioConfig(filename='test/recording.wav')
+    audio_config = audio.AudioConfig(filename=filename)
 
     recognizer = SpeechRecognizer(
         speech_config=speech_config, audio_config=audio_config
@@ -98,6 +98,7 @@ def handle_text():
 
 @app.route('/audio', methods=['POST'])
 def handle_audio():
+    global answer
     if 'audio' in request.files:
         audio = request.files['audio']
 
@@ -105,7 +106,8 @@ def handle_audio():
             filepath = os.path.join(app.config['UPLOAD_FOLDER'], audio.filename)
             audio.save(filepath)
             os.system('ffmpeg -y -i test/recording.ogg test/recording.wav')
-            recognize()
+            question = recognize('test/recording.wav')
+            answer = get_answer(question)
 
     return redirect('/')
 
